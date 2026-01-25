@@ -9,7 +9,17 @@ export const boardApi = {
 
   getBoard: (boardId: string) =>
     axios.get<Board>(`${API_URL}/api/boards/${boardId}`),
-  deleteBoard: (boardId: string) => axios.delete(`${API_URL}/board/${boardId}`),
+  deleteBoard: (boardId: string) =>
+    axios.delete(`${API_URL}/api/board/${boardId}`),
+
+  createTask: (
+    boardId: string,
+    column: ColumnType,
+    data: {
+      title: string;
+      description: string;
+    },
+  ) => axios.post<Task>(`${API_URL}/api/boards/${boardId}/${column}`, data),
 
   updateTask: (
     boardId: string,
@@ -21,6 +31,11 @@ export const boardApi = {
       `${API_URL}/api/boards/${boardId}/${column}/${taskId}`,
       data,
     ),
+
+  updateTaskColumn: (boardId: string, taskId: string, newColumn: ColumnType) =>
+    axios.patch(`${API_URL}/api/boards/${boardId}/tasks/${taskId}/column`, {
+      column: newColumn,
+    }),
 
   deleteTask: (boardId: string, column: ColumnType, taskId: string) =>
     axios.delete(`${API_URL}/api/boards/${boardId}/${column}/${taskId}`),

@@ -1,4 +1,3 @@
-import { connect } from "react-redux";
 import TaskPage from "./components/TaskPage";
 import { Task } from "./types/task";
 
@@ -14,4 +13,4 @@ const mapStateToProps = (state: Task[]) => ({
   tasks: state,
 });
 
-export default connect(mapStateToProps)(App);
+export default App;

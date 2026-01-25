@@ -26,22 +26,18 @@ const SingleTask = ({ task, column, boardId }: SingleTaskProps) => {
 
   return (
     <>
-      <div className="card p-2 m-1 position-relative">
-        <h5 style={{ color: "#3a4" }}>{task.title}</h5>
-        <p>{task.description}</p>
+      <div className="p-4 position-relative  bg-gray-200 rounded-xl shadow-md">
+        <h5 className="color-white  font-semibold text-lg mb-2">
+          {task.title}
+        </h5>
+        <p className="color-white text-md mb-3">{task.description}</p>
 
-        <div className="d-flex justify-content-end gap-2 mt-2">
-          <button
-            onClick={() => setIsEditOpen(true)}
-            className="btn btn-sm btn-outline-primary"
-          >
+        <div className="flex justify-end gap-3">
+          <button onClick={() => setIsEditOpen(true)} className="">
             <FaEdit />
           </button>
 
-          <button
-            onClick={handleDelete}
-            className="btn btn-sm btn-outline-danger"
-          >
+          <button onClick={handleDelete} className="">
             <FaTrash />
           </button>
         </div>

@@ -26,6 +26,46 @@ export const getBoard = createAsyncThunk(
   },
 );
 
+export const deleteBoard = createAsyncThunk(
+  "boards/deleteBoard",
+  async (boardId: string, { rejectWithValue }) => {
+    try {
+      await boardApi.deleteBoard(boardId);
+      return boardId;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || "Error");
+    }
+  },
+);
+
+export const createTask = createAsyncThunk(
+  "boards/createTask",
+  async (
+    {
+      boardId,
+      column,
+      title,
+      description,
+    }: {
+      boardId: string;
+      column: ColumnType;
+      title: string;
+      description: string;
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      const { data } = await boardApi.createTask(boardId, column, {
+        title,
+        description,
+      });
+      return { column, task: data };
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Error");
+    }
+  },
+);
+
 export const updateTask = createAsyncThunk(
   "boards/updateTask",
   async ({
@@ -46,6 +86,37 @@ export const updateTask = createAsyncThunk(
       description,
     });
     return { column, task: res.data };
+  },
+);
+
+export const updateTaskColumn = createAsyncThunk(
+  "boards/updateTaskColumn",
+  async (
+    {
+      boardId,
+      taskId,
+      from,
+      to,
+    }: {
+      boardId: string;
+      taskId: string;
+      from: ColumnType;
+      to: ColumnType;
+    },
+    { getState, rejectWithValue },
+  ) => {
+    try {
+      const state = getState() as any;
+      const task = state.boards.board.columns[from].find(
+        (t: any) => t.id === taskId,
+      );
+
+      await boardApi.updateTaskColumn(boardId, taskId, to);
+
+      return { task, from, to };
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || "Error");
+    }
   },
 );
 

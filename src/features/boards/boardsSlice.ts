@@ -2,9 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Board } from "../../types/backend";
 import {
   createBoard,
+  createTask,
   deleteTask,
   fetchBoard,
   updateTask,
+  updateTaskColumn,
 } from "./boardsThunks";
 
 interface BoardState {
@@ -46,6 +48,10 @@ const boardsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Error";
       })
+      .addCase(createTask.fulfilled, (state, action) => {
+        if (!state.board) return;
+        state.board.columns[action.payload.column].push(action.payload.task);
+      })
 
       .addCase(updateTask.fulfilled, (state, action) => {
         if (!state.board) return;
@@ -57,6 +63,19 @@ const boardsSlice = createSlice({
           task[index] = action.payload.task;
         }
       })
+
+      .addCase(updateTaskColumn.fulfilled, (state, action) => {
+        if (!state.board) return;
+
+        const { task, from, to } = action.payload;
+
+        state.board.columns[from] = state.board.columns[from].filter(
+          (t) => t.id !== task.id,
+        );
+
+        state.board.columns[to].push(task);
+      })
+
       .addCase(deleteTask.fulfilled, (state, action) => {
         if (!state.board) return;
         state.board.columns[action.payload.column] = state.board.columns[

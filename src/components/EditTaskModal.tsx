@@ -32,33 +32,37 @@ const EditTaskModal = ({ task, boardId, column, onClose }: Props) => {
 
   return (
     <div
-      className="modal fade show d-block"
+      className="fixed inset-0 flex items-center justify-center z-50"
       style={{ background: "rgba(0,0,0,0.5)" }}
     >
-      <div className="modal-dialog">
-        <div className="modal-content p-3">
-          <h5>Edit task</h5>
+      <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-lg">
+        <h5 className="text-xl font-bold mb-4">Edit Task</h5>
 
-          <input
-            className="form-control mb-2"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+        <input
+          className="w-full mb-2 p-2 border border-gray-300 rounded"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-          <textarea
-            className="form-control mb-2"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+        <textarea
+          className="w-full mb-2 p-2 border border-gray-300 rounded"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
 
-          <div className="d-flex justify-content-end gap-2">
-            <button className="btn btn-secondary" onClick={onClose}>
-              Cancel
-            </button>
-            <button className="btn btn-primary" onClick={handleSave}>
-              Save
-            </button>
-          </div>
+        <div className="flex justify-end gap-2 mt-4">
+          <button
+            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            onClick={handleSave}
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>

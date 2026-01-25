@@ -1,5 +1,10 @@
 import { useState } from "react";
 
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
+import { createTask } from "../features/boards/boardsThunks";
+import { ColumnType } from "../types/backend";
+
 type Props = {
   isOpen: boolean;
   onClose: () => void;
@@ -11,22 +16,26 @@ const CreateNewTask = ({ isOpen, onClose, boardId }: Props) => {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("todo");
 
-  if (!isOpen) return null;
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = () => {
     if (!title.trim()) return alert("Enter task title");
 
-    console.log("New task:", {
-      title,
-      description,
-      status,
-      boardId,
-    });
+    dispatch(
+      createTask({
+        boardId,
+        column: status as ColumnType,
+        title,
+        description,
+      }),
+    );
 
     onClose();
     setTitle("");
     setDescription("");
   };
+
+  if (!isOpen) return null;
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-lg">
