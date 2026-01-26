@@ -17,6 +17,7 @@ interface BoardState {
   loadingBoard: boolean;
   loadingBoards: boolean;
   error: string | null;
+  initialized: boolean;
 }
 
 const initialState: BoardState = {
@@ -25,6 +26,7 @@ const initialState: BoardState = {
   loadingBoard: false,
   loadingBoards: false,
   error: null,
+  initialized: false,
 };
 
 const boardsSlice = createSlice({
@@ -40,10 +42,11 @@ const boardsSlice = createSlice({
       .addCase(fetchBoard.fulfilled, (state, action) => {
         state.loadingBoard = false;
         state.board = action.payload;
+        state.initialized = true;
       })
       .addCase(fetchBoard.rejected, (state, action) => {
         state.loadingBoard = false;
-        state.error = action.error.message || "Error";
+        state.initialized = true;
       })
 
       .addCase(fetchBoards.pending, (state) => {

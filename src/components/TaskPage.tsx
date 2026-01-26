@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { RotatingLines } from "react-loader-spinner";
 import {
   DragDropContext,
   Droppable,
@@ -44,7 +45,23 @@ const TaskPage = () => {
     });
   }, [dispatch]);
 
-  if (loading) return <p className="text-center mt-10 text-lg">Loading...</p>;
+  const initialized = useSelector(
+    (state: RootState) => state.boards.initialized,
+  );
+
+  if (!initialized || loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <RotatingLines
+          height="80"
+          width="80"
+          color="#f6b83d"
+          ariaLabel="loading"
+        />
+      </div>
+    );
+  }
+
   if (!board) return <p className="text-center mt-10 text-red-500">No board</p>;
 
   const loadBoard = () => {
@@ -79,37 +96,37 @@ const TaskPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 flex flex-col">
-      <div className="w-full flex gap-10 max-w-md mx-auto mb-6">
+    <div className="min-h-screen bg-[#fff] p-6 flex flex-col">
+      <div className="w-full flex gap-10 max-w-3xl mx-auto mb-10 justify-center ">
         <div className="relative flex-1">
           <input
             type="text"
             placeholder="Enter Board ID..."
             value={boardIdInput}
             onChange={(e) => setBoardIdInput(e.target.value)}
-            className="w-full pl-4 pr-10 py-2 rounded-lg border border-gray-300 
-         focus:outline-none focus:ring-2 focus:ring-blue-500 
-         focus:border-blue-500 transition"
+            className="w-full pl-4 pr-10 py-2 rounded-lg border border-[#f6b83d] 
+         focus:outline-none focus:ring-2 focus:ring-[#f6b83d]
+         focus:border-[#f6b83d] transition"
           />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
             <IoIosSearch size={22} />
           </span>
         </div>
-        <button
-          onClick={loadBoard}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-        >
-          Load
-        </button>
-      </div>
+        <div className="flex gap-8">
+          <button
+            onClick={loadBoard}
+            className="px-4  py-2 bg-[#f6b83d] rounded-full border text-white  hover:bg-white  hover:border-[#f6b83d] hover:text-[#f6b83d] transition"
+          >
+            Load
+          </button>
 
-      <div className="flex justify-center mb-4">
-        <button
-          onClick={() => setIsBoardsModalOpen(true)}
-          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-        >
-          Show all boards
-        </button>
+          <button
+            onClick={() => setIsBoardsModalOpen(true)}
+            className="px-4 py-2 bg-white  text-[#f6b83d] border-1 border-[#f6b83d]  rounded-full  hover:bg-[#f6b83d] hover:text-white transition"
+          >
+            Show all boards
+          </button>
+        </div>
       </div>
 
       {isBoardsModalOpen && (
@@ -167,8 +184,8 @@ const TaskPage = () => {
                   {status === "todo" && (
                     <button
                       onClick={() => setIsModalOpen(true)}
-                      className="flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 
-                rounded-lg p-8 text-gray-500 hover:border-blue-500 hover:text-blue-600 transition"
+                      className="flex items-center justify-center gap-2 border-2 border-dashed border-gray-500 
+                rounded-lg p-8 text-gray-500 hover:border-[#f9b020] hover:text-[#f9b020] transition"
                     >
                       <span className="text-xl">+</span>
                       <span className="text-sm font-medium">Add new task</span>

@@ -26,7 +26,7 @@ const SingleTask = ({ task, column, boardId }: SingleTaskProps) => {
 
   return (
     <>
-      <div className="p-4 position-relative  bg-gray-200 rounded-xl shadow-md">
+      <div className="p-4 position-relative text-white  bg-[#f6b83d] rounded-xl hover:bg-[#f9b020] hover:scale-102 shadow-md transition-transform duration-400">
         <h5 className="color-white  font-semibold text-lg mb-2">
           {task.title}
         </h5>

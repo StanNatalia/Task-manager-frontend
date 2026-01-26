@@ -46,7 +46,9 @@ const CreateNewTask = ({ isOpen, onClose, boardId }: Props) => {
           placeholder="Task title..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full mb-3 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full mb-3 px-3 py-2 border rounded-lg border-[#f6b83d] 
+         focus:outline-none focus:ring-2 focus:ring-[#f6b83d]
+         focus:border-[#f6b83d] transition"
         />
 
         <input
@@ -54,13 +56,17 @@ const CreateNewTask = ({ isOpen, onClose, boardId }: Props) => {
           placeholder="Task description..."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full mb-3 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full mb-3 px-3 py-2 border rounded-lg border-[#f6b83d] 
+         focus:outline-none focus:ring-2 focus:ring-[#f6b83d]
+         focus:border-[#f6b83d] transition"
         />
 
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          className="w-full mb-4 px-3 py-2 border rounded-lg"
+          className="w-full mb-4 px-3 py-2 border rounded-lg border-[#f6b83d] 
+         focus:outline-none focus:ring-2 focus:ring-[#f6b83d]
+         focus:border-[#f6b83d] transition"
         >
           <option value="todo">Todo</option>
           <option value="inProgress">In Progress</option>
@@ -70,13 +76,13 @@ const CreateNewTask = ({ isOpen, onClose, boardId }: Props) => {
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg border hover:bg-gray-100"
+            className="px-4  py-2 bg-[#f6b83d] rounded-full border  text-white  hover:bg-white hover:border-[#f6b83d] hover:text-[#f6b83d] transition"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 bg-white  text-[#f6b83d] border border-[#f6b83d]  rounded-full  hover:bg-[#f6b83d] hover:text-white transition"
           >
             Create
           </button>

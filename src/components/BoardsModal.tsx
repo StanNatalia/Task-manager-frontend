@@ -9,6 +9,7 @@ import {
   updateBoard,
 } from "../features/boards/boardsThunks";
 import { FaRegCopy } from "react-icons/fa";
+import { RotatingLines } from "react-loader-spinner";
 
 type Props = {
   onClose: () => void;
@@ -70,18 +71,23 @@ const BoardsModal = ({ onClose }: Props) => {
   const handleCopyId = (boardId: string) => {
     navigator.clipboard.writeText(boardId).then(() => {
       setCopiedBoardId(boardId);
-      setTimeout(() => setCopiedBoardId(null), 1500); // сброс уведомления через 1.5 сек
+      setTimeout(() => setCopiedBoardId(null), 1500);
     });
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 w-[450px] shadow-lg">
-        <h3 className="text-xl font-bold mb-4 text-center">All Boards</h3>
+      <div className="bg-[#fff] rounded-xl p-8 w-[450px] shadow-lg">
+        <h3 className="text-2xl font-bold mb-4 text-center">All Boards</h3>
 
         {loading && (
-          <div className="text-center text-gray-500 py-6">
-            Loading boards...
+          <div className="min-h-screen flex items-center justify-center bg-[gray-100]">
+            <RotatingLines
+              height="80"
+              width="80"
+              color="#f6b83d"
+              ariaLabel="loading"
+            />
           </div>
         )}
 
@@ -90,7 +96,7 @@ const BoardsModal = ({ onClose }: Props) => {
         )}
 
         {!loading && !error && boards.length === 0 && (
-          <div className="text-center text-gray-500 py-6">
+          <div className="text-center text-[#f6b83d] py-6">
             No boards found 😢
           </div>
         )}
@@ -100,7 +106,7 @@ const BoardsModal = ({ onClose }: Props) => {
             {boards.map((b) => (
               <div
                 key={b.boardId}
-                className="flex items-center justify-between p-2 rounded-lg border hover:bg-blue-50 transition"
+                className="flex items-center justify-between p-5 rounded-lg border border-[#f9b020] hover:bg-[#fff4df] transition"
               >
                 {editingBoardId === b.boardId ? (
                   <input
@@ -121,13 +127,13 @@ const BoardsModal = ({ onClose }: Props) => {
                           e.stopPropagation();
                           handleCopyId(b.boardId);
                         }}
-                        className="text-blue-500 hover:text-blue-700 transition"
+                        className="text-[#f6b83d] hover:text-[#f9b020] transition"
                         title="Copy Board ID"
                       >
                         <FaRegCopy />
                       </button>
                       {copiedBoardId === b.boardId && (
-                        <span className="text-green-500 ml-1 text-xs">
+                        <span className="text-[#f9b020] ml-1 text-xs">
                           Copied!
                         </span>
                       )}
@@ -135,28 +141,30 @@ const BoardsModal = ({ onClose }: Props) => {
                   </div>
                 )}
 
-                {editingBoardId === b.boardId ? (
-                  <button
-                    onClick={saveEdit}
-                    className="text-green-500 px-2 font-semibold"
-                  >
-                    Save
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => startEdit(b.boardId, b.name)}
-                    className="text-blue-500 px-2 font-semibold"
-                  >
-                    Edit
-                  </button>
-                )}
+                <div className="flex justify-center gap-2">
+                  {editingBoardId === b.boardId ? (
+                    <button
+                      onClick={saveEdit}
+                      className=" bg-white border  px-3 py-2  text-[#f6b83d]   border-[#f6b83d]  rounded-full  hover:bg-[#f6b83d] hover:text-white transition font-semibold"
+                    >
+                      Save
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => startEdit(b.boardId, b.name)}
+                      className="bg-[#f6b83d] border px-3 py-2 rounded-full  text-white  hover:bg-white hover:text-[#f6b83d] hover:border-[#f6b83d] transition font-semibold"
+                    >
+                      Edit
+                    </button>
+                  )}
 
-                <button
-                  onClick={() => handleDelete(b.boardId)}
-                  className="text-red-500 px-2 font-semibold"
-                >
-                  Delete
-                </button>
+                  <button
+                    onClick={() => handleDelete(b.boardId)}
+                    className="bg-[#f6b83d] border px-3 py-2 rounded-full  text-white  hover:bg-white hover:text-[#f6b83d] hover:border-[#f6b83d] transition font-semibold"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -168,11 +176,13 @@ const BoardsModal = ({ onClose }: Props) => {
             placeholder="New board name..."
             value={newBoardName}
             onChange={(e) => setNewBoardName(e.target.value)}
-            className="border rounded px-2 py-1 flex-1"
+            className="border rounded px-2 py-1 flex-1 border-[#f6b83d] 
+         focus:outline-none focus:ring-2 focus:ring-[#f6b83d] rounded-lg
+         focus:border-[#f6b83d] transition"
           />
           <button
             onClick={handleCreateBoard}
-            className="bg-green-500 text-white px-3 rounded hover:bg-green-600 transition"
+            className="bg-[#f6b83d] text-white px-3 rounded hover:bg-[#f9b020] transition"
           >
             Add
           </button>
@@ -180,7 +190,7 @@ const BoardsModal = ({ onClose }: Props) => {
 
         <button
           onClick={onClose}
-          className="mt-4 w-full bg-gray-200 rounded-lg py-2 hover:bg-gray-300 transition"
+          className="mt-4 w-full text-white bg-[#f6b83d] hover:bg-[#f9b020] rounded-lg py-2 transition"
         >
           Close
         </button>
