@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Board, ColumnType, Task } from "../../types/backend";
+import { getBoard } from "./boardsThunks";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -7,10 +8,17 @@ export const boardApi = {
   createBoard: (name: string) =>
     axios.post<Board>(`${API_URL}/api/boards`, { name }),
 
+  getBoards: () =>
+    axios.get<{ boardId: string; name: string }[]>(`${API_URL}/api/boards`),
+
   getBoard: (boardId: string) =>
     axios.get<Board>(`${API_URL}/api/boards/${boardId}`),
+
+  updateBoard: (boardId: string, name: string) =>
+    axios.put(`${API_URL}/api/boards/${boardId}`, { name }),
+
   deleteBoard: (boardId: string) =>
-    axios.delete(`${API_URL}/api/board/${boardId}`),
+    axios.delete(`${API_URL}/api/boards/${boardId}`),
 
   createTask: (
     boardId: string,

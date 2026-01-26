@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../app/store";
 import {
   deleteBoard,
   fetchBoard,
+  fetchBoards,
   updateTaskColumn,
 } from "../features/boards/boardsThunks";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ import { ColumnType } from "../types/backend";
 import { IoIosSearch } from "react-icons/io";
 import CreateNewTask from "./CreateNewTask";
 import SingleTask from "./SingleTask";
+import BoardsModal from "./BoardsModal";
 
 const TASKS_STATUSES = ["todo", "inProgress", "done"];
 
@@ -28,13 +30,18 @@ const statusTitles: Record<ColumnType, string> = {
 const TaskPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [boardIdInput, setBoardIdInput] = useState("");
+  const [isBoardsModalOpen, setIsBoardsModalOpen] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const board = useSelector((state: RootState) => state.boards.board);
-  const loading = useSelector((state: RootState) => state.boards.loading);
+  const loading = useSelector((state: RootState) => state.boards.loadingBoard);
 
   useEffect(() => {
-    dispatch(fetchBoard("q5vby7nf"));
+    dispatch(fetchBoards()).then((res: any) => {
+      if (res.payload && res.payload.length > 0) {
+        dispatch(fetchBoard(res.payload[0].boardId));
+      }
+    });
   }, [dispatch]);
 
   if (loading) return <p className="text-center mt-10 text-lg">Loading...</p>;
@@ -95,6 +102,19 @@ const TaskPage = () => {
           Load
         </button>
       </div>
+
+      <div className="flex justify-center mb-4">
+        <button
+          onClick={() => setIsBoardsModalOpen(true)}
+          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+        >
+          Show all boards
+        </button>
+      </div>
+
+      {isBoardsModalOpen && (
+        <BoardsModal onClose={() => setIsBoardsModalOpen(false)} />
+      )}
 
       <h2 className="text-3xl font-bold text-center mb-8">
         Your board: {board.name}

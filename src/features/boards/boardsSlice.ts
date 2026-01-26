@@ -5,49 +5,85 @@ import {
   createTask,
   deleteTask,
   fetchBoard,
+  fetchBoards,
+  updateBoard,
   updateTask,
   updateTaskColumn,
 } from "./boardsThunks";
 
 interface BoardState {
   board: Board | null;
-  loading: boolean;
+  boards: Board[];
+  loadingBoard: boolean;
+  loadingBoards: boolean;
   error: string | null;
 }
 
 const initialState: BoardState = {
   board: null,
-  loading: false,
+  boards: [],
+  loadingBoard: false,
+  loadingBoards: false,
   error: null,
 };
 
 const boardsSlice = createSlice({
-  name: "board",
+  name: "boards",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+
       .addCase(fetchBoard.pending, (state) => {
-        state.loading = true;
+        state.loadingBoard = true;
       })
       .addCase(fetchBoard.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loadingBoard = false;
         state.board = action.payload;
       })
       .addCase(fetchBoard.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingBoard = false;
         state.error = action.error.message || "Error";
       })
+
+      .addCase(fetchBoards.pending, (state) => {
+        state.loadingBoards = true;
+      })
+      .addCase(fetchBoards.fulfilled, (state, action) => {
+        state.loadingBoards = false;
+        state.boards = action.payload;
+      })
+      .addCase(fetchBoards.rejected, (state, action) => {
+        state.loadingBoards = false;
+        state.error = action.error.message || "Error";
+      })
+
+      .addCase(updateBoard.fulfilled, (state, action) => {
+        const updatedBoard = action.payload;
+        if (!updatedBoard) return;
+
+        const index = state.boards.findIndex(
+          (b) => b.boardId === updatedBoard.boardId,
+        );
+        if (index !== -1) state.boards[index] = updatedBoard;
+
+        if (state.board?.boardId === updatedBoard.boardId)
+          state.board = updatedBoard;
+      })
+
       .addCase(createBoard.pending, (state) => {
-        state.loading = true;
+        state.loadingBoard = true;
       })
       .addCase(createBoard.fulfilled, (state, action) => {
+        state.loadingBoard = false;
+        state.boards.push(action.payload); // добавляем новую доску в список
         state.board = action.payload;
       })
       .addCase(createBoard.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingBoard = false;
         state.error = action.error.message || "Error";
       })
+
       .addCase(createTask.fulfilled, (state, action) => {
         if (!state.board) return;
         state.board.columns[action.payload.column].push(action.payload.task);
@@ -56,11 +92,11 @@ const boardsSlice = createSlice({
       .addCase(updateTask.fulfilled, (state, action) => {
         if (!state.board) return;
 
-        const task = state.board.columns[action.payload.column];
-        const index = task.findIndex((t) => t.id === action.payload.task.id);
+        const tasks = state.board.columns[action.payload.column];
+        const index = tasks.findIndex((t) => t.id === action.payload.task.id);
 
         if (index !== -1) {
-          task[index] = action.payload.task;
+          tasks[index] = action.payload.task;
         }
       })
 
@@ -78,6 +114,7 @@ const boardsSlice = createSlice({
 
       .addCase(deleteTask.fulfilled, (state, action) => {
         if (!state.board) return;
+
         state.board.columns[action.payload.column] = state.board.columns[
           action.payload.column
         ].filter((t) => t.id !== action.payload.taskId);

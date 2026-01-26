@@ -1,11 +1,32 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { boardApi } from "./boardsApi";
 import { ColumnType } from "../../types/backend";
+import axios from "axios";
 
 export const fetchBoard = createAsyncThunk(
   "boards/fetchBoard",
   async (boardId: string) => {
     const res = await boardApi.getBoard(boardId);
+    return res.data;
+  },
+);
+
+export const fetchBoards = createAsyncThunk(
+  "boards/fetchBoards",
+  async (_, thunkAPI) => {
+    try {
+      const res = await boardApi.getBoards();
+      return res.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue("Failed to load boards");
+    }
+  },
+);
+
+export const updateBoard = createAsyncThunk(
+  "boards/updateBoard",
+  async ({ boardId, name }: { boardId: string; name: string }) => {
+    const res = await boardApi.updateBoard(boardId, name);
     return res.data;
   },
 );
