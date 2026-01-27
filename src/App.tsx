@@ -5,12 +5,8 @@ type AppProps = {
   tasks: Task[];
 };
 
-function App({ tasks }: AppProps) {
-  return <TaskPage tasks={tasks} />;
+function App() {
+  return <TaskPage />;
 }
-
-const mapStateToProps = (state: Task[]) => ({
-  tasks: state,
-});
 
 export default App;
