@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { boardApi } from "./boardsApi";
 import { ColumnType } from "../../types/backend";
-import axios from "axios";
 
 export const fetchBoard = createAsyncThunk(
   "boards/fetchBoard",
@@ -33,6 +32,7 @@ export const updateBoard = createAsyncThunk(
 
 export const createBoard = createAsyncThunk(
   "boards/createBoard",
+
   async (name: string) => {
     const res = await boardApi.createBoard(name);
     return res.data;

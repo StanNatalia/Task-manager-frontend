@@ -19,6 +19,7 @@ import { IoIosSearch } from "react-icons/io";
 import CreateNewTask from "./CreateNewTask";
 import SingleTask from "./SingleTask";
 import BoardsModal from "./BoardsModal";
+import toast from "react-hot-toast";
 
 const TASKS_STATUSES = ["todo", "inProgress", "done"];
 
@@ -36,6 +37,7 @@ const TaskPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const board = useSelector((state: RootState) => state.boards.board);
   const loading = useSelector((state: RootState) => state.boards.loadingBoard);
+  const error = useSelector((state: RootState) => state.boards.error);
 
   useEffect(() => {
     dispatch(fetchBoards()).then((res: any) => {
@@ -62,11 +64,32 @@ const TaskPage = () => {
     );
   }
 
-  if (!board) return <p className="text-center mt-10 text-red-500">No board</p>;
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-center text-4xl font-bold text-[#f6b83d]">
+          Something went wrong...
+        </p>
+      </div>
+    );
+  }
 
-  const loadBoard = () => {
-    if (boardIdInput.trim()) {
-      dispatch(fetchBoard(boardIdInput.trim()));
+  if (!board)
+    return (
+      <p className="text-center text-4xl font-bold mt-15 text-[#f6b83d]">
+        No boards yet...
+      </p>
+    );
+
+  const loadBoard = async () => {
+    if (!boardIdInput.trim()) return;
+
+    try {
+      await dispatch(fetchBoard(boardIdInput.trim())).unwrap();
+    } catch (err) {
+      toast.error("Board with this ID does not exist!", {
+        position: "top-right",
+      });
     }
   };
 
@@ -97,32 +120,34 @@ const TaskPage = () => {
 
   return (
     <div className="min-h-screen bg-[#fff] p-6 flex flex-col">
-      <div className="w-full flex gap-10 max-w-3xl mx-auto mb-10 justify-center ">
-        <div className="relative flex-1">
+      <div className="w-full flex flex-col gap-5 md:flex-row md:gap-10 max-w-3xl mx-auto mb-10">
+        <div className="relative w-full md:flex-1">
           <input
             type="text"
             placeholder="Enter Board ID..."
             value={boardIdInput}
             onChange={(e) => setBoardIdInput(e.target.value)}
             className="w-full pl-4 pr-10 py-2 rounded-lg border border-[#f6b83d] 
-         focus:outline-none focus:ring-2 focus:ring-[#f6b83d]
-         focus:border-[#f6b83d] transition"
+         focus:outline-none focus:ring-2 focus:ring-[#f6b83d] focus:border-[#f6b83d] transition text-sm md:text-base"
           />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
             <IoIosSearch size={22} />
           </span>
         </div>
-        <div className="flex gap-8">
+
+        <div className="flex flex-col sm:flex-row gap-2 justify-center md:justify-start">
           <button
             onClick={loadBoard}
-            className="px-4  py-2 bg-[#f6b83d] rounded-full border text-white  hover:bg-white  hover:border-[#f6b83d] hover:text-[#f6b83d] transition"
+            className="px-4 py-2 bg-[#f6b83d] rounded-full border text-white  
+        hover:bg-white hover:border-[#f6b83d] hover:text-[#f6b83d] transition text-sm sm:text-base w-full sm:w-auto"
           >
             Load
           </button>
 
           <button
             onClick={() => setIsBoardsModalOpen(true)}
-            className="px-4 py-2 bg-white  text-[#f6b83d] border-1 border-[#f6b83d]  rounded-full  hover:bg-[#f6b83d] hover:text-white transition"
+            className="px-4 py-2 bg-white text-[#f6b83d] border border-[#f6b83d] rounded-full
+        hover:bg-[#f6b83d] hover:text-white transition text-sm sm:text-base w-full sm:w-auto"
           >
             Show all boards
           </button>
@@ -134,7 +159,7 @@ const TaskPage = () => {
       )}
 
       <h2 className="text-3xl font-bold text-center mb-8">
-        Your board: {board.name}
+        Board name: {board.name}
       </h2>
 
       <CreateNewTask
@@ -151,7 +176,7 @@ const TaskPage = () => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="bg-white rounded-xl shadow-md p-4 flex flex-col gap-4 flex-1"
+                  className="bg-white rounded-xl shadow-lg p-4 flex flex-col gap-4 flex-1"
                 >
                   <h3 className="text-xl font-bold mb-4 text-gray-700 text-center">
                     {statusTitles[status as ColumnType]}
@@ -188,7 +213,7 @@ const TaskPage = () => {
                 rounded-lg p-8 text-gray-500 hover:border-[#f9b020] hover:text-[#f9b020] transition"
                     >
                       <span className="text-xl">+</span>
-                      <span className="text-sm font-medium">Add new task</span>
+                      <span className="text-md font-medium">Add new task</span>
                     </button>
                   )}
                 </div>

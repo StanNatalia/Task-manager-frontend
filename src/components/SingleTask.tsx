@@ -34,11 +34,11 @@ const SingleTask = ({ task, column, boardId }: SingleTaskProps) => {
 
         <div className="flex justify-end gap-3">
           <button onClick={() => setIsEditOpen(true)} className="">
-            <FaEdit />
+            <FaEdit size={22} />
           </button>
 
           <button onClick={handleDelete} className="">
-            <FaTrash />
+            <FaTrash size={22} />
           </button>
         </div>
       </div>

@@ -79,8 +79,7 @@ const boardsSlice = createSlice({
       })
       .addCase(createBoard.fulfilled, (state, action) => {
         state.loadingBoard = false;
-        state.boards.push(action.payload); // добавляем новую доску в список
-        state.board = action.payload;
+        state.boards.push(action.payload);
       })
       .addCase(createBoard.rejected, (state, action) => {
         state.loadingBoard = false;
