@@ -54,7 +54,11 @@ const boardsSlice = createSlice({
       })
       .addCase(fetchBoards.fulfilled, (state, action) => {
         state.loadingBoards = false;
-        state.boards = action.payload;
+        state.boards = action.payload.map((b) => ({
+          ...b,
+          _id: "",
+          columns: { todo: [], inProgress: [], done: [] },
+        }));
       })
       .addCase(fetchBoards.rejected, (state, action) => {
         state.loadingBoards = false;
