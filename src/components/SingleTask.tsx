@@ -1,11 +1,12 @@
 import { Task } from "../types/task";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../app/store";
-import { deleteTask } from "../features/boards/boardsThunks";
+import { AppDispatch } from "../redux/store";
+import { deleteTask } from "../redux/boards/boardsThunks";
 import { ColumnType } from "../types/backend";
 import { FaTrash, FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import { useState } from "react";
 import EditTaskModal from "./EditTaskModal";
+import DeleteTaskModal from "./DeleteTaskModal";
 
 export type SingleTaskProps = {
   task: Task;
@@ -17,12 +18,7 @@ const SingleTask = ({ task, column, boardId }: SingleTaskProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [isEditOpen, setIsEditOpen] = useState(false);
-
-  const handleDelete = () => {
-    if (confirm("Are you sure you want to delete this task?")) {
-      dispatch(deleteTask({ boardId, column, taskId: task.id }));
-    }
-  };
+  const [isDeleteModal, setDeleteModal] = useState(false);
 
   return (
     <>
@@ -37,11 +33,20 @@ const SingleTask = ({ task, column, boardId }: SingleTaskProps) => {
             <FaEdit size={22} />
           </button>
 
-          <button onClick={handleDelete} className="">
+          <button onClick={() => setDeleteModal(true)} className="">
             <FaTrash size={22} />
           </button>
         </div>
       </div>
+
+      {isDeleteModal && (
+        <DeleteTaskModal
+          taskId={task.id}
+          boardId={boardId}
+          column={column}
+          onClose={() => setDeleteModal(false)}
+        />
+      )}
 
       {isEditOpen && (
         <EditTaskModal

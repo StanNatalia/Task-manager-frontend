@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../app/store";
+import { AppDispatch, RootState } from "../redux/store";
 import { useEffect, useState, useRef } from "react";
 import {
   fetchBoard,
@@ -7,7 +7,7 @@ import {
   createBoard,
   deleteBoard,
   updateBoard,
-} from "../features/boards/boardsThunks";
+} from "../redux/boards/boardsThunks";
 import { FaRegCopy } from "react-icons/fa";
 import { RotatingLines } from "react-loader-spinner";
 import { IoMdClose } from "react-icons/io";
@@ -111,9 +111,21 @@ const BoardsModal = ({ onClose }: Props) => {
   const handleCopyId = (boardId: string) => {
     navigator.clipboard.writeText(boardId).then(() => {
       setCopiedBoardId(boardId);
-      setTimeout(() => setCopiedBoardId(null), 1500);
     });
   };
+
+  const myPromise = new Promise((resolve, reject) => {
+    const success = true;
+
+    if (success) {
+      resolve;
+    } else {
+      reject;
+    }
+  });
+  myPromise
+    .then((result) => console.log(result))
+    .catch((error) => console.log(error));
 
   return (
     <div

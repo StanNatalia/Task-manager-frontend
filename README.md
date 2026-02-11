@@ -34,6 +34,12 @@ A web-based task management application inspired by Kanban boards. Users can cre
 
 ---
 
+## Requirements
+
+- **Node.js:** 24.11.1
+
+---
+
 # Installation
 
 ### Backend
@@ -46,16 +52,11 @@ git clone <repository-url>
 
 npm install
 
-3. Create a .env file:
-
-PORT=3000
-MONGO_URI=mongodb+srv://natasha:212121@kamban.sizy77v.mongodb.net/my_boards?appName=kamban
-
-4. Run in development mode:
+3. Run in development mode:
 
 npm run dev
 
-5. Build and run production:
+4. Build and run production:
 
 npm run build
 npm start

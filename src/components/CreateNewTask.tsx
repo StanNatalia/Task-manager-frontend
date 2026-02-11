@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../app/store";
-import { createTask } from "../features/boards/boardsThunks";
+import { AppDispatch } from "../redux/store";
+import { createTask } from "../redux/boards/boardsThunks";
 import { ColumnType } from "../types/backend";
 import { IoMdClose } from "react-icons/io";
 import toast from "react-hot-toast";

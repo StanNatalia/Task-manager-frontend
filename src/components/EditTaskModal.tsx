@@ -1,8 +1,8 @@
 import { useDispatch } from "react-redux";
 import { ColumnType, Task } from "../types/backend";
-import { AppDispatch } from "../app/store";
+import { AppDispatch } from "../redux/store";
 import { useState, useRef, useEffect } from "react";
-import { updateTask } from "../features/boards/boardsThunks";
+import { updateTask } from "../redux/boards/boardsThunks";
 import { IoMdClose } from "react-icons/io";
 
 type Props = {

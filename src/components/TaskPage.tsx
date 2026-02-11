@@ -6,13 +6,13 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { AppDispatch, RootState } from "../app/store";
+import { AppDispatch, RootState } from "../redux/store";
 import {
   deleteBoard,
   fetchBoard,
   fetchBoards,
   updateTaskColumn,
-} from "../features/boards/boardsThunks";
+} from "../redux/boards/boardsThunks";
 import { useEffect, useState } from "react";
 import { ColumnType } from "../types/backend";
 import { IoIosSearch } from "react-icons/io";
