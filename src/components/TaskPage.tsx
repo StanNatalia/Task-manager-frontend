@@ -68,7 +68,7 @@ const TaskPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <p className="text-center text-4xl font-bold text-[#f6b83d]">
-          Something went wrong...
+          Something went wrong..
         </p>
       </div>
     );
